@@ -43,18 +43,21 @@ public class BukkitBuycraftPlatform extends BukkitBuycraftPlatformBase {
         Material material;
         short variant = 0;
 
+        // LibertyLand start - remove support for legacy icons
         if (materialData.matches("^\\d+$")) {
-            material = Material.getMaterial(Integer.valueOf(materialData));
+            //material = Material.getMaterial(Integer.valueOf(materialData));
+            return null;
         } else if (!materialData.contains(":")) {
             material = Material.matchMaterial(materialData);
         } else {
             String[] parts = materialData.split(":");
-            if (parts[0].matches("^\\d+$")) {
+            /*if (parts[0].matches("^\\d+$")) {
                 material = Material.getMaterial(Integer.valueOf(parts[0]));
-            } else {
-                material = Material.matchMaterial(parts[0]);
-            }
+            } else {*/
+                material = Material.matchMaterial(parts[1]);
+            /*}
             variant = Short.valueOf(parts[1]);
+            LibertyLand end*/
         }
 
         if (material == null) return null;
