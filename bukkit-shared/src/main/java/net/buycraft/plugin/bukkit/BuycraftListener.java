@@ -38,6 +38,7 @@ public class BuycraftListener implements Listener {
         }
     }
 
+    /* LibertyLand - actually register the buy command properly
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (!plugin.getConfiguration().isDisableBuyCommand()) {
@@ -49,7 +50,7 @@ public class BuycraftListener implements Listener {
                 }
             }
         }
-    }
+    }*/
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {

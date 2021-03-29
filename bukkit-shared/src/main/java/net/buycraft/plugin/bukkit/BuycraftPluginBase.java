@@ -1,5 +1,6 @@
 package net.buycraft.plugin.bukkit;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonParseException;
 import io.netty.channel.Channel;
 import net.buycraft.plugin.BuyCraftAPI;
@@ -36,6 +37,7 @@ import net.buycraft.plugin.shared.tasks.PlayerJoinCheckTask;
 import net.buycraft.plugin.shared.util.AnalyticsSend;
 import okhttp3.OkHttpClient;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -46,6 +48,8 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -199,6 +203,19 @@ public abstract class BuycraftPluginBase extends JavaPlugin {
         command.getSubcommandMap().put("coupon", new CouponSubcommand(this));
         command.getSubcommandMap().put("sendlink", new SendLinkSubcommand(this));
         getCommand("buycraft").setExecutor(command);
+        // LibertyLand start - actually register the buy command properly
+        List<String> buyNames = getConfiguration().getBuyCommandName();
+        if(!(getConfiguration().isDisableBuyCommand()) && !(buyNames.isEmpty()))
+        {
+            String buyName = buyNames.get(0);
+            String[] aliases = new String[buyNames.size() - 1];
+
+            PluginCommand buyCmd = getCommand(buyName);
+            if(aliases.length > 0)
+                buyCmd.setAliases(Arrays.asList(Arrays.copyOfRange(buyNames.toArray(aliases), 1, buyNames.size())));
+            buyCmd.setExecutor(new BuyCommand(this));
+        }
+        // LibertyLand end
 
         // Initialize sign layouts.
         try {
