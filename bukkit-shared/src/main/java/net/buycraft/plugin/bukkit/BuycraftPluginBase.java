@@ -1,6 +1,5 @@
 package net.buycraft.plugin.bukkit;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonParseException;
 import io.netty.channel.Channel;
 import net.buycraft.plugin.BuyCraftAPI;
@@ -207,12 +206,8 @@ public abstract class BuycraftPluginBase extends JavaPlugin {
         List<String> buyNames = getConfiguration().getBuyCommandName();
         if(!(getConfiguration().isDisableBuyCommand()) && !(buyNames.isEmpty()))
         {
-            String buyName = buyNames.get(0);
-            String[] aliases = new String[buyNames.size() - 1];
-
-            PluginCommand buyCmd = getCommand(buyName);
-            if(aliases.length > 0)
-                buyCmd.setAliases(Arrays.asList(Arrays.copyOfRange(buyNames.toArray(aliases), 1, buyNames.size())));
+            PluginCommand buyCmd = getCommand("buycraftbuy");
+            buyCmd.setAliases(buyNames);
             buyCmd.setExecutor(new BuyCommand(this));
         }
         // LibertyLand end
