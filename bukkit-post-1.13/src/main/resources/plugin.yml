@@ -8,3 +8,5 @@ commands:
     aliases: [buycraft]
     permission: buycraft.admin
     description: Main command for the Tebex plugin.
+  buycraftbuy:
+    description: Buy with Tebex 
