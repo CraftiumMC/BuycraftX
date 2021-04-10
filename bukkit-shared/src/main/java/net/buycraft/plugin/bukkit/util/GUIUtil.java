@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class GUIUtil {
     }
 
     public static void closeInventoryLater(final Player player) {
-        plugin.getServer().getScheduler().runTask(plugin, player::closeInventory);
+        plugin.getServer().getScheduler().runTask(plugin, (Runnable) player::closeInventory);
     }
 
     public static void replaceInventory(Inventory oldInv, Inventory newInv) {

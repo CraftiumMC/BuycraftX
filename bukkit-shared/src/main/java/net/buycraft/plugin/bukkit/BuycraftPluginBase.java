@@ -207,8 +207,9 @@ public abstract class BuycraftPluginBase extends JavaPlugin {
         if(!(getConfiguration().isDisableBuyCommand()) && !(buyNames.isEmpty()))
         {
             PluginCommand buyCmd = getCommand("buycraftbuy");
-            buyCmd.setAliases(buyNames);
             buyCmd.setExecutor(new BuyCommand(this));
+            for(String alias : buyNames)
+                getServer().getCommandMap().register(alias, "buycraftx", buyCmd);
         }
         // LibertyLand end
 
