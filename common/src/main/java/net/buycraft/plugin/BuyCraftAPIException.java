@@ -52,4 +52,16 @@ public class BuyCraftAPIException extends RuntimeException {
     public String getResponseBody() {
         return responseBody;
     }
+
+    @Override
+    public Throwable initCause(Throwable cause)
+    {
+        return this;
+    }
+
+    @Override
+    public Throwable fillInStackTrace()
+    {
+        return this;
+    }
 }
