@@ -8,6 +8,7 @@ import net.buycraft.plugin.data.QueuedPlayer;
 import net.buycraft.plugin.data.responses.ServerInformation;
 import net.buycraft.plugin.execution.placeholder.PlaceholderManager;
 import net.buycraft.plugin.execution.strategy.CommandExecutor;
+import net.buycraft.plugin.platform.NoBlocking;
 import net.buycraft.plugin.platform.PlatformInformation;
 import net.buycraft.plugin.platform.PlatformType;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 
+@NoBlocking
 public class VelocityBuycraftPlatform implements IBuycraftPlatform {
 
     private Map<Level, Function<Logger, BiConsumer<String, Throwable>>> LOG_LEVEL_MAP = new HashMap<Level, Function<Logger, BiConsumer<String, Throwable>>>() {{
@@ -45,7 +47,7 @@ public class VelocityBuycraftPlatform implements IBuycraftPlatform {
 
     @Override
     public void dispatchCommand(String command) {
-        plugin.getServer().getCommandManager().execute(plugin.getServer().getConsoleCommandSource(), command);
+        plugin.getServer().getCommandManager().executeAsync(plugin.getServer().getConsoleCommandSource(), command);
     }
 
     @Override
