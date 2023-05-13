@@ -47,7 +47,6 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -150,14 +149,14 @@ public abstract class BuycraftPluginBase extends JavaPlugin {
         // Start the essential tasks.
         this.duePlayerFetcherTask = getServer().getScheduler().runTaskLaterAsynchronously(this, duePlayerFetcher = new DuePlayerFetcher(platform,
                 configuration.isVerbose()), 20);
-        completedCommandsTask = new PostCompletedCommandsTask(platform);
+        completedCommandsTask = new PostCompletedCommandsTask(configuration.isVerbose(), platform);
 
         commandExecutor = new QueuedCommandExecutor(platform, completedCommandsTask);
         ((QueuedCommandExecutor) commandExecutor).setRunMaxCommandsBlocking(configuration.getCommandsPerTick());
 
         getServer().getScheduler().runTaskTimer(this, (Runnable) this.commandExecutor, 1, 1);
         getServer().getScheduler().runTaskTimerAsynchronously(this, completedCommandsTask, 20, 20);
-        playerJoinCheckTask = new PlayerJoinCheckTask(platform);
+        playerJoinCheckTask = new PlayerJoinCheckTask(configuration.isVerbose(), platform);
         getServer().getScheduler().runTaskTimer(this, playerJoinCheckTask, 20, 20);
         serverEventSenderTask = new ServerEventSenderTask(platform, configuration.isVerbose());
         getServer().getScheduler().runTaskTimerAsynchronously(this, serverEventSenderTask, 20 * 60, 20 * 60);
@@ -167,7 +166,7 @@ public abstract class BuycraftPluginBase extends JavaPlugin {
         categoryViewGUI = new CategoryViewGUI(this);
 
         // Update listing.
-        listingUpdateTask = new ListingUpdateTask(platform, () -> {
+        listingUpdateTask = new ListingUpdateTask(configuration.isVerbose(), platform, () -> {
             if (!this.isEnabled()) return;
             Bukkit.getScheduler().runTask(this, new GUIUpdateTask(this));
             Bukkit.getScheduler().runTask(this, new BuyNowSignUpdater(this));

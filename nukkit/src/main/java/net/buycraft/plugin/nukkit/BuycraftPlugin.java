@@ -103,11 +103,11 @@ public class BuycraftPlugin extends PluginBase {
 
         // Queueing tasks.
         platform.executeAsyncLater(duePlayerFetcher = new DuePlayerFetcher(platform, configuration.isVerbose()), 1, TimeUnit.SECONDS);
-        completedCommandsTask = new PostCompletedCommandsTask(platform);
+        completedCommandsTask = new PostCompletedCommandsTask(configuration.isVerbose(), platform);
         commandExecutor = new QueuedCommandExecutor(platform, completedCommandsTask);
         getServer().getScheduler().scheduleDelayedRepeatingTask(this, completedCommandsTask, 20, 20);
         getServer().getScheduler().scheduleDelayedRepeatingTask(this, (Runnable) commandExecutor, 1, 1);
-        playerJoinCheckTask = new PlayerJoinCheckTask(platform);
+        playerJoinCheckTask = new PlayerJoinCheckTask(configuration.isVerbose(), platform);
         getServer().getScheduler().scheduleDelayedRepeatingTask(this, playerJoinCheckTask, 1, 1);
         serverEventSenderTask = new ServerEventSenderTask(platform, configuration.isVerbose());
         getServer().getScheduler().scheduleDelayedRepeatingTask(this, serverEventSenderTask, 20 * 60, 20 * 60, true);

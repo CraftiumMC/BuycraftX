@@ -11,12 +11,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 public class ListingUpdateTask implements Runnable {
+    private final boolean verbose;
     private final IBuycraftPlatform platform;
     private final AtomicReference<Listing> listing = new AtomicReference<>();
     private final AtomicReference<Date> lastUpdate = new AtomicReference<>();
     private final Runnable updateTask;
 
-    public ListingUpdateTask(final IBuycraftPlatform platform, final Runnable updateTask) {
+    public ListingUpdateTask(boolean verbose, final IBuycraftPlatform platform, final Runnable updateTask) {
+        this.verbose = verbose;
         this.platform = platform;
         this.updateTask = updateTask;
     }
@@ -31,7 +33,9 @@ public class ListingUpdateTask implements Runnable {
         try {
             listing.set(platform.getApiClient().retrieveListing().execute().body());
         } catch (IOException e) {
-            platform.log(Level.SEVERE, "Error whilst retrieving listing", e);
+            if (verbose) {
+                platform.log(Level.SEVERE, "Error whilst retrieving listing", e);
+            }
             return;
         }
         lastUpdate.set(new Date());

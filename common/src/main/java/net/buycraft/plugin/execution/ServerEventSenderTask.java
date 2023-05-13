@@ -6,7 +6,6 @@ import net.buycraft.plugin.IBuycraftPlatform;
 import net.buycraft.plugin.data.ServerEvent;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -38,13 +37,10 @@ public class ServerEventSenderTask implements Runnable {
             try {
                 if (verbose) platform.log(Level.INFO, "Sending " + runEvents.size() + " analytic events");
                 platform.getApiClient().sendEvents(runEvents).execute();
-            } catch (SocketTimeoutException e) {
+            } catch (IOException | BuyCraftAPIException e) {
                 if (verbose) {
                     platform.log(Level.SEVERE, "Failed to send analytic events!", e);
                 }
-                return;
-            } catch (IOException | BuyCraftAPIException e) {
-                platform.log(Level.SEVERE, "Failed to send analytic events!", e);
                 return;
             }
 

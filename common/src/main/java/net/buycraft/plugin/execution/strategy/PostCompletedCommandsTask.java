@@ -12,11 +12,13 @@ import java.util.logging.Level;
 
 public class PostCompletedCommandsTask implements Runnable {
     private static final int MAXIMUM_COMMANDS_TO_POST = 50;
+    private final boolean verbose;
     private final Queue<Integer> completed = new ConcurrentLinkedQueue<>();
     private final ArrayList<Integer> retainedCompleted = new ArrayList<>();
     private final IBuycraftPlatform platform;
 
-    public PostCompletedCommandsTask(final IBuycraftPlatform platform) {
+    public PostCompletedCommandsTask(boolean verbose, final IBuycraftPlatform platform) {
+        this.verbose = verbose;
         this.platform = platform;
     }
 
@@ -32,7 +34,9 @@ public class PostCompletedCommandsTask implements Runnable {
             try {
                 platform.getApiClient().deleteCommands(commandsToPost).execute();
             } catch (IOException e) {
-                platform.log(Level.SEVERE, "Unable to mark commands as completed", e);
+                if (verbose) {
+                    platform.log(Level.SEVERE, "Unable to mark commands as completed", e);
+                }
                 // TODO: Retry?
             }
         }
@@ -53,7 +57,9 @@ public class PostCompletedCommandsTask implements Runnable {
                 try {
                     platform.getApiClient().deleteCommands(list).execute();
                 } catch (IOException e) {
-                    platform.log(Level.SEVERE, "Unable to mark commands as completed", e);
+                    if (verbose) {
+                        platform.log(Level.SEVERE, "Unable to mark commands as completed", e);
+                    }
                     break;
                 }
             }

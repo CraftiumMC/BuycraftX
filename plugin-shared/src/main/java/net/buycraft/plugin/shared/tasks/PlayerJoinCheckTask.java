@@ -8,10 +8,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PlayerJoinCheckTask implements Runnable {
+    private final boolean verbose;
     private final IBuycraftPlatform platform;
     private final Queue<QueuedPlayer> queuedPlayers = new ConcurrentLinkedQueue<>();
 
-    public PlayerJoinCheckTask(IBuycraftPlatform platform) {
+    public PlayerJoinCheckTask(boolean verbose, IBuycraftPlatform platform) {
+        this.verbose = verbose;
         this.platform = platform;
     }
 
@@ -19,7 +21,7 @@ public class PlayerJoinCheckTask implements Runnable {
     public void run() {
         QueuedPlayer qp = queuedPlayers.poll();
         if (qp != null) {
-            platform.executeAsync(new PlayerCommandExecutor(qp, platform));
+            platform.executeAsync(new PlayerCommandExecutor(verbose, qp, platform));
         }
     }
 

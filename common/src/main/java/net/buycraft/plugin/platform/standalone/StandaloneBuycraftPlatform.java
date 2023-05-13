@@ -38,7 +38,7 @@ public abstract class StandaloneBuycraftPlatform implements IBuycraftPlatform {
         this.scheduler = executorService;
         this.placeholderManager.addPlaceholder(new NamePlaceholder());
         this.placeholderManager.addPlaceholder(new UuidPlaceholder());
-        PostCompletedCommandsTask completedCommandsTask = new PostCompletedCommandsTask(this);
+        PostCompletedCommandsTask completedCommandsTask = new PostCompletedCommandsTask(false,this);
         this.commandExecutor = new QueuedCommandExecutor(this, completedCommandsTask);
         scheduler.scheduleAtFixedRate(commandExecutor, 50, 50, TimeUnit.MILLISECONDS);
         scheduler.scheduleAtFixedRate(completedCommandsTask, 1, 1, TimeUnit.SECONDS);

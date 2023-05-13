@@ -128,11 +128,11 @@ public class BuycraftPlugin extends Plugin {
 
         // Queueing tasks.
         getProxy().getScheduler().schedule(this, duePlayerFetcher = new DuePlayerFetcher(platform, configuration.isVerbose()), 1, TimeUnit.SECONDS);
-        completedCommandsTask = new PostCompletedCommandsTask(platform);
+        completedCommandsTask = new PostCompletedCommandsTask(configuration.isVerbose(), platform);
         commandExecutor = new QueuedCommandExecutor(platform, completedCommandsTask);
         getProxy().getScheduler().schedule(this, completedCommandsTask, 1, 1, TimeUnit.SECONDS);
         getProxy().getScheduler().schedule(this, (Runnable) commandExecutor, 50, 50, TimeUnit.MILLISECONDS);
-        playerJoinCheckTask = new PlayerJoinCheckTask(platform);
+        playerJoinCheckTask = new PlayerJoinCheckTask(configuration.isVerbose(), platform);
         getProxy().getScheduler().schedule(this, playerJoinCheckTask, 1, 1, TimeUnit.SECONDS);
         serverEventSenderTask = new ServerEventSenderTask(platform, configuration.isVerbose());
         getProxy().getScheduler().schedule(this, serverEventSenderTask, 1, 1, TimeUnit.MINUTES);

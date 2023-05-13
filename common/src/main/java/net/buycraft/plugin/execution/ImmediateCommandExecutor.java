@@ -9,9 +9,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 public class ImmediateCommandExecutor implements Runnable {
+    private final boolean verbose;
     private final IBuycraftPlatform platform;
 
-    public ImmediateCommandExecutor(final IBuycraftPlatform platform) {
+    public ImmediateCommandExecutor(final boolean verbose, final IBuycraftPlatform platform) {
+        this.verbose = verbose;
         this.platform = platform;
     }
 
@@ -26,7 +28,9 @@ public class ImmediateCommandExecutor implements Runnable {
             // Retrieve offline command queue.
             information = platform.getApiClient().retrieveOfflineQueue().execute().body();
         } catch (IOException e) {
-            platform.log(Level.SEVERE, "Could not fetch command queue", e);
+            if (verbose) {
+                platform.log(Level.SEVERE, "Could not fetch command queue", e);
+            }
             return;
         }
 

@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 public class PlayerCommandExecutor implements Runnable {
+    private final boolean verbose;
     private final QueuedPlayer player;
     private final IBuycraftPlatform platform;
 
-    public PlayerCommandExecutor(final QueuedPlayer player, final IBuycraftPlatform platform) {
+    public PlayerCommandExecutor(boolean verbose, final QueuedPlayer player, final IBuycraftPlatform platform) {
+        this.verbose = verbose;
         this.player = player;
         this.platform = platform;
     }
@@ -25,7 +27,9 @@ public class PlayerCommandExecutor implements Runnable {
             information = platform.getApiClient().getPlayerQueue(player.getId()).execute().body();
         } catch (IOException e) {
             // TODO: Implement retry logic.
-            platform.log(Level.SEVERE, "Could not fetch command queue for player", e);
+            if (verbose) {
+                platform.log(Level.SEVERE, "Could not fetch command queue for player", e);
+            }
             return;
         }
         platform.log(Level.INFO, String.format("Fetched %d commands for player '%s'.", information.getCommands().size(), player.getName()));

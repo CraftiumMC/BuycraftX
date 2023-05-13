@@ -6,7 +6,6 @@ import net.buycraft.plugin.data.QueuedPlayer;
 import net.buycraft.plugin.data.responses.DueQueueInformation;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -65,13 +64,10 @@ public class DuePlayerFetcher implements Runnable {
                         return;
                     }
                     nextCheck = information.getMeta().getNextCheck();
-                } catch (SocketTimeoutException e) {
+                } catch (IOException e) {
                     if (verbose) {
                         platform.log(Level.SEVERE, "Could not fetch due players queue", e);
                     }
-                    return;
-                } catch (IOException e) {
-                    platform.log(Level.SEVERE, "Could not fetch due players queue", e);
                     return;
                 }
 
@@ -90,7 +86,7 @@ public class DuePlayerFetcher implements Runnable {
                 if (verbose) {
                     platform.log(Level.INFO, "Executing commands that can be completed now...");
                 }
-                platform.executeAsync(new ImmediateCommandExecutor(platform));
+                platform.executeAsync(new ImmediateCommandExecutor(verbose, platform));
             }
 
             lock.lock();
@@ -132,7 +128,7 @@ public class DuePlayerFetcher implements Runnable {
             }
             for (int i = 0; i < processNow.size(); i++) {
                 QueuedPlayer qp = processNow.get(i);
-                platform.executeAsyncLater(new PlayerCommandExecutor(qp, platform), DELAY_BETWEEN_PLAYERS * (i + 1), TimeUnit.MILLISECONDS);
+                platform.executeAsyncLater(new PlayerCommandExecutor(verbose, qp, platform), DELAY_BETWEEN_PLAYERS * (i + 1), TimeUnit.MILLISECONDS);
             }
         }
     }

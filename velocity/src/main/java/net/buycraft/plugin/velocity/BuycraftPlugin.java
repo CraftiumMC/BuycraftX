@@ -155,7 +155,7 @@ public class BuycraftPlugin {
                 .buildTask(this, duePlayerFetcher = new DuePlayerFetcher(platform, configuration.isVerbose()))
                 .delay(1, TimeUnit.SECONDS)
                 .schedule();
-        completedCommandsTask = new PostCompletedCommandsTask(platform);
+        completedCommandsTask = new PostCompletedCommandsTask(configuration.isVerbose(), platform);
         commandExecutor = new QueuedCommandExecutor(platform, completedCommandsTask);
         getServer().getScheduler()
                 .buildTask(this, completedCommandsTask)
@@ -167,7 +167,7 @@ public class BuycraftPlugin {
                 .delay(50, TimeUnit.MILLISECONDS)
                 .repeat(1, TimeUnit.MILLISECONDS)
                 .schedule();
-        playerJoinCheckTask = new PlayerJoinCheckTask(platform);
+        playerJoinCheckTask = new PlayerJoinCheckTask(configuration.isVerbose(), platform);
         getServer().getScheduler()
                 .buildTask(this, playerJoinCheckTask)
                 .delay(1, TimeUnit.SECONDS)

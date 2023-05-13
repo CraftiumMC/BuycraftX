@@ -134,15 +134,15 @@ public class BuycraftPlugin {
         placeholderManager.addPlaceholder(new NamePlaceholder());
         placeholderManager.addPlaceholder(new UuidPlaceholder());
         platform.executeAsyncLater(duePlayerFetcher = new DuePlayerFetcher(platform, configuration.isVerbose()), 1, TimeUnit.SECONDS);
-        completedCommandsTask = new PostCompletedCommandsTask(platform);
+        completedCommandsTask = new PostCompletedCommandsTask(configuration.isVerbose(), platform);
         commandExecutor = new QueuedCommandExecutor(platform, completedCommandsTask);
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).delayTicks(1).execute((Runnable) commandExecutor).submit(this);
         Sponge.getScheduler().createTaskBuilder().intervalTicks(20).delayTicks(20).async().execute(completedCommandsTask).submit(this);
-        playerJoinCheckTask = new PlayerJoinCheckTask(platform);
+        playerJoinCheckTask = new PlayerJoinCheckTask(configuration.isVerbose(), platform);
         Sponge.getScheduler().createTaskBuilder().intervalTicks(20).delayTicks(20).execute(playerJoinCheckTask).submit(this);
         serverEventSenderTask = new ServerEventSenderTask(platform, configuration.isVerbose());
         Sponge.getScheduler().createTaskBuilder().interval(1, TimeUnit.MINUTES).async().delay(1, TimeUnit.MINUTES).execute(serverEventSenderTask).submit(this);
-        listingUpdateTask = new ListingUpdateTask(platform, null);
+        listingUpdateTask = new ListingUpdateTask(configuration.isVerbose(), platform, null);
         if (apiClient != null) {
             getLogger().info("Fetching all server packages...");
             listingUpdateTask.run();
