@@ -12,7 +12,7 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: ['bukkit-post-1.13/target/buycraftx-*.jar' , 'velocity/target/buycraftx-*.jar'], fingerprint: true
+                    archiveArtifacts artifacts: 'bukkit-post-1.13/target/buycraftx-*.jar,velocity/target/buycraftx-*.jar', fingerprint: true
                 }
             }
         }
