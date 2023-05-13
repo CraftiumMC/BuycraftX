@@ -12,6 +12,7 @@
     <artifactId>buycraftx-velocity</artifactId>
 
     <build>
+        <finalName>buycraftx-velocity-${project.version}-craftium</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
